@@ -74,7 +74,7 @@ const prompt = systemPrompt + "\n" + userPrompt;
     if (language) extraContext += ` in ${language} language`;
 
     const prompt = `
-You are a movie recommendation assistant.
+You are a song recommendation assistant.
 Recommend exactly 3 songs.
 
 Respond only in JSON:
@@ -85,11 +85,29 @@ Respond only in JSON:
     { "title": "Song 3", "year": "Year", "reason": "Why this song" }
   ]
 }
+
+**Important:** Only pick songs that were actually released in that year.
 `;
+
+  // ==========================================================
+    // TEMPERATURE
+    // ==========================================================
+    
+//     const prompt = `Recommend 3 movies in the genre "${genre}" for someone in a "${mood}" mood.
+// Respond in JSON: { "movies": ["Movie1", "Movie2", "Movie3"] }`;
+
+//     const result = await model.generateContent({
+//       contents: [{ role: "user", parts: [{ text: prompt }] }],
+//       generationConfig: { temperature: 0.9 }, // higher = more creative
+//     });
+    
 
 
     // ========= CALL GEMINI =========
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+  generationConfig: { temperature: 0.2 },
+    });
     let response = result.response.text();
 
     // Clean up markdown fences if present
