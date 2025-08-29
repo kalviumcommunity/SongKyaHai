@@ -148,7 +148,7 @@ Now classify this text:
 Text: "This food tastes terrible."  
 Sentiment:
 
-          ` }] }],
+` }] }],
     });
     let response = result.response.text();
 
@@ -162,4 +162,38 @@ Sentiment:
   }
 }
 
-module.exports = { generateSongRecommendation , oneShot};
+const multiShot = async (req, res) =>{
+  try{
+        const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: `
+           Example 1:
+Q: Write a Python function to add two numbers.
+A:
+def add(a, b):
+    return a + b
+
+Example 2:
+Q: Write a Python function to check if a number is even.
+A:
+def is_even(n):
+    return n % 2 == 0
+
+Now your turn:
+Q: Write a Python function to find the factorial of a number.
+A:
+
+` }] }],
+    });
+    let response = result.response.text();
+
+    // Clean up markdown fences if present
+    response = response.replace(/```json|```/g, "").trim();
+
+    return res.status(200).json({message : response});
+  }catch(error){
+    console.error("Gemini API Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+module.exports = { generateSongRecommendation , oneShot, multiShot};
