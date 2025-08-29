@@ -1,3 +1,4 @@
+// src/components/MovieGenerator.jsx
 import { useState } from "react";
 import axios from "axios";
 
@@ -7,7 +8,7 @@ function SongGenerator() {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(false);
 
- const genres = [
+const genres = [
   "Pop",
   "Rock",
   "Hip-Hop",
@@ -55,7 +56,7 @@ function SongGenerator() {
   };
 
   return (
-    <div>
+    <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-md">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Genre Dropdown */}
         <div>
@@ -108,9 +109,20 @@ function SongGenerator() {
         {songs.length > 0 && (
           <div>
             <h2 className="text-xl font-bold mb-3">🎥 Recommended Songs:</h2>
-            <ul className="list-disc list-inside space-y-1">
+            <ul className="space-y-3">
               {songs.map((song, index) => (
-                <li key={index}>{song}</li>
+                <li
+                  key={index}
+                  className="border p-3 rounded-lg shadow-sm bg-gray-50"
+                >
+                  <p className="font-semibold">{song.title}</p>
+                  {song.year && <p className="text-sm">Year: {song.year}</p>}
+                  {song.reason && (
+                    <p className="text-sm text-gray-600">
+                      Why: {song.reason}
+                    </p>
+                  )}
+                </li>
               ))}
             </ul>
           </div>
