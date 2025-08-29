@@ -135,4 +135,31 @@ Respond only in JSON:
   }
 };
 
-module.exports = { generateSongRecommendation };
+
+const oneShot = async (req, res) =>{
+  try{
+        const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: `
+          Example:  
+Text: 'I love this movie!'  
+Sentiment: Positive  
+
+Now classify this text:  
+Text: "This food tastes terrible."  
+Sentiment:
+
+          ` }] }],
+    });
+    let response = result.response.text();
+
+    // Clean up markdown fences if present
+    response = response.replace(/```json|```/g, "").trim();
+
+    return res.status(200).json({message : response});
+  }catch(error){
+    console.error("Gemini API Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+module.exports = { generateSongRecommendation , oneShot};
