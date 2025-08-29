@@ -31,32 +31,32 @@ Music Data: Spotify API / Last.fm API
 
 Each concept below is worth 1 mark:
 
-Zero-shot Prompting
+### 1. Zero-shot Prompting
 
 The Mood Analyzer can understand user emotions without examples.
 
 Example: “Extract primary and secondary emotions from this text and return JSON.”
 
-Dynamic Prompting
+### 2. Dynamic Prompting
 
 Prompts adapt based on user preferences (e.g., exclude sad songs if requested).
 
-System & User Prompts
+### 3. System & User Prompts
 
 System prompt sets the agent role (“You are MoodAnalyzer…”), while the user provides mood input.
 
-Structured Output
+### 4. Structured Output
 
 Responses are enforced in JSON for easy parsing by the frontend.
 
-Temperature
+### 5. Temperature
 
 Controls creativity of recommendations (low = safe picks, high = diverse picks).
 
-Top P (Nucleus Sampling)
+### 6. Top P (Nucleus Sampling)
 
 Ensures balance between trending hits and niche tracks.
 
-Function Calling
+### 7. Function Calling
 
 AI triggers backend functions like getSongDetails() to fetch Spotify data.
