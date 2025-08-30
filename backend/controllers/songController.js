@@ -196,4 +196,26 @@ A:
   }
 }
 
-module.exports = { generateSongRecommendation , oneShot, multiShot};
+const dynamicPrompt = async (req, res) => {
+  try {
+    const user_name = "Issac";
+    const city = "Kerala";
+
+    const prompt = `Write a welcome message for ${user_name} who just signed up from ${city}.`;
+
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.4 },
+    });
+
+    let response = result.response.text();
+    response = response.replace(/```/g, "").trim();
+
+    return res.status(200).json({ message: response });
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+module.exports = { generateSongRecommendation , oneShot, multiShot, dynamicPrompt};
