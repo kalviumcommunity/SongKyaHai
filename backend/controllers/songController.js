@@ -218,4 +218,31 @@ const dynamicPrompt = async (req, res) => {
   }
 };
 
-module.exports = { generateSongRecommendation , oneShot, multiShot, dynamicPrompt};
+const stopSequence = async (req, res) => {
+  try {
+    const prompt = `
+List 3 fruits in CSV format, separated by commas.
+Important: Stop after listing 3 fruits, do not continue writing.
+`;
+
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.2 },
+    });
+
+    let response = result.response.text();
+    response = response.replace(/```/g, "").trim();
+
+    // Ensure we stop at the first 3 fruits (before the 3rd comma)
+    const parts = response.split(",");
+    const trimmed = parts.slice(0, 3).map(p => p.trim()).join(",");
+
+    return res.status(200).json({ message: trimmed });
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+module.exports = { generateSongRecommendation , oneShot, multiShot, dynamicPrompt, stopSequence};
