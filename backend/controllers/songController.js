@@ -135,6 +135,24 @@ Respond only in JSON:
   }
 };
 
+const zeroShot = async (req, res) => {
+  try {
+    const prompt = "What is the meaning of life?";
+
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.3 }, // balanced creativity
+    });
+
+    let response = result.response.text();
+    response = response.replace(/```/g, "").trim();
+
+    return res.status(200).json({ message: response });
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 const oneShot = async (req, res) =>{
   try{
@@ -245,4 +263,4 @@ Important: Stop after listing 3 fruits, do not continue writing.
 };
 
 
-module.exports = { generateSongRecommendation , oneShot, multiShot, dynamicPrompt, stopSequence};
+module.exports = { generateSongRecommendation , zeroShot, oneShot, multiShot, dynamicPrompt, stopSequence};
